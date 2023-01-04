@@ -1,8 +1,9 @@
 create = {
     security_groups = true
+    security_groups_rules = true
 }
 
-
+# All security groups configuration
 security_group_configurations = {
     security_groups = {
 #--------------------->>  Security Group 0  <-------------------------------------------
@@ -18,8 +19,8 @@ security_group_configurations = {
                     to_port          = 443
                     protocol         = "tcp"
                     cidr_blocks      = ["0.0.0.0/0"]
-                    ipv6_cidr_blocks = ["::/0"]  #Optional 
-                    #security_groups  = ["sg-0a6e0e87b17d914be"]
+                    # ipv6_cidr_blocks = ["::/0"]  #Optional 
+                    
                 },
                 # Ingress Rule 1
                 1 = {
@@ -28,8 +29,8 @@ security_group_configurations = {
                     to_port          = 22
                     protocol         = "tcp"
                     cidr_blocks      = ["0.0.0.0/0"]
-                    ipv6_cidr_blocks = ["::/0"] #Optional 
-                    #security_groups  = ["sg-0a6e0e87b17d914be"]
+                    # ipv6_cidr_blocks = ["::/0"] #Optional 
+                   
                 },
             }
             # Egress Rules
@@ -41,8 +42,8 @@ security_group_configurations = {
                     to_port          = 0
                     protocol         = "-1"
                     cidr_blocks      = ["0.0.0.0/0"]
-                    ipv6_cidr_blocks = ["::/0"]  #Optional
-                    #security_groups  = ["sg-0a6e0e87b17d914be"] 
+                    # ipv6_cidr_blocks = ["::/0"]  #Optional
+                  
                 },
                 # Egress Rule 1
                 ##############
@@ -65,7 +66,6 @@ security_group_configurations = {
                     to_port          = 443
                     protocol         = "tcp"
                     cidr_blocks      = []
-                    security_groups  = ["sg-0a6e0e87b17d914be"]
                     #ipv6_cidr_blocks = ["::/0"]  #Optional 
                 },
                 # Ingress Rule 1
@@ -76,7 +76,7 @@ security_group_configurations = {
                     protocol         = "tcp"
                     cidr_blocks      = ["0.0.0.0/0"]
                     #ipv6_cidr_blocks = ["::/0"]   #Optional
-                    security_groups  = ["sg-0a6e0e87b17d914be"] 
+                    
                 },
             }
             # Egress Rules
@@ -99,9 +99,33 @@ security_group_configurations = {
                 Name = "security_group_1"
             }
         }
-# #--------------------->>  Security Group 2  <-------------------------------------------
-# #######
-# #######
+#--------------------->>  Security Group 2  <-------------------------------------------
+#######
+#######
     }
+}
 
+
+
+# Security groups rules that allow traffic via security group
+security_groups_rules_configurations = {
+    rules = {
+        # This rule adds an inbound rule to security group 'Name = "security_group_0"'
+        # that allows all traffic from Name = "security_group_1"
+        0 = {
+            type              = "ingress"
+            to_port           = "0"
+            protocol          = "-1"
+            source_security_group_tags = {
+                Name = "security_group_1"
+            }
+            from_port         = "0"
+            security_group_tags = {
+                Name = "security_group_0"
+            }
+        },
+
+        #Similarly you can add multiple rules here.
+
+    }
 }
